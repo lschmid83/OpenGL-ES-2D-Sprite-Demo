@@ -281,28 +281,6 @@ public class GLSprite extends Renderable implements Cloneable {
         gl.glPopMatrix();
     }
 
-
-    /**
-     * Draws the sprite
-     * @param gl The GL context
-     * @param angle Angle of rotation.
-     */
-    public void draw(GL10 gl, float angle, int centerX, int centerY) {
-        gl.glBindTexture(GL10.GL_TEXTURE_2D, mTextureName);
-
-        // Draw using verts or VBO verts.
-        gl.glPushMatrix();
-
-        // Rotate.
-        gl.glTranslatef(x + centerY, y + centerX, 0);
-        gl.glRotatef(angle,0,0,1.0f);
-        gl.glTranslatef(-centerY, -centerX, 0);
-
-        mGrid.draw(gl, true, false);
-        gl.glPopMatrix();
-    }
-
-
     /**
      * Draws the sprite at the x,y coordinates
      * @param gl The GL context
@@ -315,16 +293,25 @@ public class GLSprite extends Renderable implements Cloneable {
         draw(gl);
     }
 
-    public void draw(GL10 gl, float x, float y, float w, float h) {
+    /**
+     * Draws the sprite repeating to a set width and height. Used to draw repeating tiles in one
+     * draw routine
+     * @param gl The GL context
+     * @param x The x coordinate
+     * @param y The x coordinate
+     * @param repeatWidth The width to repeat the sprite.
+     * @param repeatHeight The height to repeat the sprite.
+     */
+    public void draw(GL10 gl, float x, float y, float repeatWidth, float repeatHeight) {
 
-        if(w < 0 || h < 0)
+        if(repeatWidth < 0 || repeatHeight < 0)
             return;
 
         // Loop through width.
-        for(int a = 0; a < w / spriteWidth; a++) {
+        for(int a = 0; a < repeatWidth / spriteWidth; a++) {
 
             // Loop through height.
-            for(int b = 0; b < h / spriteHeight; b++) {
+            for(int b = 0; b < repeatHeight / spriteHeight; b++) {
 
                 int subW = (int)spriteWidth;
                 int subH = (int)spriteHeight;
@@ -332,10 +319,10 @@ public class GLSprite extends Renderable implements Cloneable {
                 cropSprite(gl, 0, 0);
 
                 // Crop width.
-                if(a == (int)(w / spriteWidth)) {
+                if(a == (int)(repeatWidth / spriteWidth)) {
 
-                    if(w % (a * spriteWidth) != 0) {
-                        subW = (int)(w - a * spriteWidth) + 1;
+                    if(repeatWidth % (a * spriteWidth) != 0) {
+                        subW = (int)(repeatWidth - a * spriteWidth) + 1;
                     }
 
                     if(subW < 1) {
@@ -346,10 +333,10 @@ public class GLSprite extends Renderable implements Cloneable {
                 }
 
                 // Crop height.
-                if(b == (int)(h / spriteHeight)) {
+                if(b == (int)(repeatHeight / spriteHeight)) {
 
-                    if(h % (b * spriteHeight) != 0) {
-                        subH = (int)(h - b * spriteHeight);
+                    if(repeatHeight % (b * spriteHeight) != 0) {
+                        subH = (int)(repeatHeight - b * spriteHeight);
                     }
 
                     if(subH < 1) {
@@ -367,6 +354,13 @@ public class GLSprite extends Renderable implements Cloneable {
 
     }
 
+    /**
+     * Draws the sprite at x,y coordinates in a 'l' - left or 'r' - right direction
+     * @param gl The GL context
+     * @param direction The direction the sprite is facing
+     * @param x The x coordinate
+     * @param y The x coordinate
+     */
     public void draw(GL10 gl, char direction, float x, float y) {
 
         this.x = y;
@@ -381,6 +375,39 @@ public class GLSprite extends Renderable implements Cloneable {
         draw(gl);
     }
 
+    /**
+     * Draws the sprite rotated to an angle with a center position
+     * @param gl The GL context
+     * @param angle The angle of rotation
+     * @param centerX The center x of rotation
+     * @param centerY The center y of rotation
+     */
+    public void draw(GL10 gl, float angle, float centerX, float centerY) {
+        gl.glBindTexture(GL10.GL_TEXTURE_2D, mTextureName);
+
+        // Draw using verts or VBO verts.
+        gl.glPushMatrix();
+
+        // Rotate.
+        gl.glTranslatef(x + centerY, y + centerX, 0);
+        gl.glRotatef(angle,0,0,1.0f);
+        gl.glTranslatef(-centerY, -centerX, 0);
+
+        mGrid.draw(gl, true, false);
+        gl.glPopMatrix();
+    }
+
+    /**
+     * Draws the sprite at x,y coordinates in a 'l' - left or 'r' - right direction rotated to an
+     * angle with a center position
+     * @param gl The GL context
+     * @param direction The direction the sprite is facing
+     * @param angle The angle of rotation
+     * @param x The x coordinate
+     * @param y The x coordinate
+     * @param centerX The center x of rotation
+     * @param centerY The center y of rotation
+     */
     public void draw(GL10 gl, char direction, float angle, float x, float y, float centerX, float centerY) {
 
         this.x = y;
@@ -394,13 +421,6 @@ public class GLSprite extends Renderable implements Cloneable {
         }
         draw(gl, angle, (int)centerX, (int)centerY);
     }
-
-    /**
-     * Loads a bitmap into OpenGL and sets up the common parameters for 2D texture maps
-     * @param gl The GL context
-     * @param texturePath The texture path
-     * @throws IOException
-     */
 
     /**
      * Loads a bitmap into OpenGL and sets up the common parameters for 2D texture maps
@@ -493,9 +513,7 @@ public class GLSprite extends Renderable implements Cloneable {
             textureToDelete[0] = getTextureName();
             gl.glDeleteTextures(1, textureToDelete, 0);
             setTextureName(0);
-            //if (Settings.UseHardwareBuffers) {
             getGrid().releaseHardwareBuffers(gl);
-            //}
         }
     }
 

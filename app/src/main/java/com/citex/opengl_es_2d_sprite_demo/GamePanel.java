@@ -52,7 +52,7 @@ public class GamePanel {
 	private SpriteSheet mBlockSprite;
 
 	/** Limits frame updates */
-	private int mFrameLimiter;
+	private float mFrameLimiter;
 
 	/** Screen resolution */
 	private final float mResolutionWidth, mResolutionHeight;
@@ -129,7 +129,7 @@ public class GamePanel {
 		mBackground.draw(gl, 0, 0);
 
 		// Draw rotating moon
-		mMoonAngle -= 0.5f;
+		mMoonAngle -= 0.1f * dt;
 		if(mMoonAngle == 0)
 			mMoonAngle = 360f;
 		mMoon.draw(gl, 'r', mMoonAngle, mResolutionWidth - 50, 25, mMoon.getWidth() / 2, mMoon.getHeight() / 2);
@@ -145,10 +145,9 @@ public class GamePanel {
 			mEnemySprite.drawFrame(gl, mEnemyFrameNumber, 'r',  mEnemyPositions.get(i).x, mEnemyPositions.get(i).y);
 
 		// Draw terrain
-		for(int i = 0; i< mResolutionWidth / 16; i++)
-			mBlockSprite.drawFrame(gl, mBlockFrameNumber, i*16, mResolutionHeight - 16);
+		mBlockSprite.drawFrame(gl, mBlockFrameNumber, 0, mResolutionHeight - 16, mResolutionWidth, 16);
 
-		mFrameLimiter++;
+		mFrameLimiter += 0.03f * dt;
 		if(mFrameLimiter > 5) {
 
 			mPlayerFrameNumber++;

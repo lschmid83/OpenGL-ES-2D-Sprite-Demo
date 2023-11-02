@@ -76,7 +76,7 @@ public class SpriteSheet {
     /**
      * Returns a frame of animation from the sprite sheet
      * @param frameNumber The frame number
-     * @return The frame of animation
+     * @return The GLSprite representing the frame of animation
      */
     public GLSprite getFrameFromSheet(Object gl, int frameNumber) {
         try {
@@ -95,36 +95,53 @@ public class SpriteSheet {
     }
 
     /**
-     * Returns a buffered frame of animation from the sprite sheet
+     * Draws a buffered frame of animation from the sprite sheet at x and y coordinates
+     * @param gl The GL context
      * @param frameNumber The frame number
-     * @return The buffered frame of animation
+     * @param x The x coordinate
+     * @param y The x coordinate
      */
     public void drawFrame(GL10 gl, int frameNumber, float x, float y) {
         mFrames[frameNumber].draw(gl, x, y);
     }
 
-    /**
-     * Returns a buffered frame of animation from the sprite sheet
-     * @param frameNumber The frame number
-     * @return The buffered frame of animation
-     */
-    public void drawFrame(GL10 gl, int frameNumber, float x, float y, float w, float h) {
-        mFrames[frameNumber].draw(gl, x, y, w, h);
-    }
 
     /**
-     * Returns a buffered frame of animation from the sprite sheet
-     * @param frameNumber The frame number
-     * @return The buffered frame of animation
+     * Draws a buffered frame of animation from the sprite sheet repeating to a set width and height
+     * Used to draw repeating tiles in one draw routine
+     * @param gl The GL context
+     * @param x The x coordinate
+     * @param y The x coordinate
+     * @param repeatWidth The width to repeat the sprite.
+     * @param repeatHeight The height to repeat the sprite.
+     */
+    public void drawFrame(GL10 gl, int frameNumber, float x, float y, float repeatWidth, float repeatHeight) {
+        mFrames[frameNumber].draw(gl, x, y, repeatWidth, repeatHeight);
+    }
+
+
+    /**
+     * Draws a buffered frame of animation from the sprite sheet at x,y coordinates in a 'l' - left
+     * or 'r' - right direction
+     * @param gl The GL context
+     * @param direction The direction the sprite is facing
+     * @param x The x coordinate
+     * @param y The x coordinate
      */
     public void drawFrame(GL10 gl, int frameNumber, char direction, float x, float y) {
         mFrames[frameNumber].draw(gl, direction, x, y);
     }
 
     /**
-     * Returns a buffered frame of animation from the sprite sheet
-     * @param frameNumber The frame number
-     * @return The buffered frame of animation
+     * Draws the a buffered frame of animation from the spritesheet at x,y coordinates in a
+     * 'l' - left or 'r' - right direction rotated to an angle with a center position
+     * @param gl The GL context
+     * @param direction The direction the sprite is facing
+     * @param angle The angle of rotation
+     * @param x The x coordinate
+     * @param y The x coordinate
+     * @param centerX The center x of rotation
+     * @param centerY The center y of rotation
      */
     public void drawFrame(GL10 gl, int frameNumber, char direction, float angle, int x, int y, int centerX, int centerY) {
         if(frameNumber <= mFrameCount)
