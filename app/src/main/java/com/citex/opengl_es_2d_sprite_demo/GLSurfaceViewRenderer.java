@@ -113,7 +113,10 @@ public class GLSurfaceViewRenderer implements GLSurfaceView.Renderer {
     public void drawFrame(GL10 gl) {
 
     	time2 = System.currentTimeMillis(); // Get current time
-		int delta = (int) (time2 - time1); // Calculate how long it's been since last updated
+		float delta = (int) (time2 - time1); // Calculate how long it's been since last updated
+
+        if(delta < 0)
+            delta = 0.01f;
 
         Grid.beginDrawing(gl, true, false);
        	
