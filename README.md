@@ -4,6 +4,10 @@ This is an OpenGL ES 2D hardware accelerated sprite demo built in Android Studio
 
 You will find you can load an image using the GLSprite class or entire sprite sheets containing frames of animations of different sizes and even change the display resolution of the screen. The sprite movement is controlled by a delta time calculated from the time between frame updates so that the demo runs at the same speed on different hardware configurations. 
 
+Here are is a screenshot of the demo app running:
+
+<img src='https://drive.google.com/uc?id=1KXw5BvXLY58r6jZEcag6zjWblbBlfKpc' width='240'>
+
 Compiling the Android Mobile Version
 ====================================
 
